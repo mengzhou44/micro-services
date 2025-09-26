@@ -1,0 +1,27 @@
+Delete everything in the default namespace
+ kubectl delete all --all
+
+
+Build images locally:
+
+docker build -t service-c:1.0 ./service-c
+docker build -t service-b:1.0 ./service-b
+docker build -t service-a:1.0 ./service-a
+
+
+Apply Kubernetes manifests:
+
+kubectl apply -f  ./k8s/services.yaml
+kubectl get pods
+kubectl get svc
+
+
+NAME         TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+service-a    NodePort    10.96.xxx.xxx   <none>        4000:30080/TCP   1m
+service-b    ClusterIP   10.96.xxx.xxx   <none>        3000/TCP         1m
+
+
+curl http://localhost:30080/call-b
+
+
+ 

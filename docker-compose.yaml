@@ -1,0 +1,20 @@
+services:
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    volumes:
+      - kafka-data:/var/lib/kafka/data
+      - ./kafka.properties:/etc/kafka/kafka.properties
+    entrypoint: >
+      bash -c "
+        if [ ! -f /var/lib/kafka/data/meta.properties ]; then
+          echo 'Formatting storage with cluster ID...';
+          kafka-storage format --cluster-id sbgNWajRTW6kw1kI9m_6gg --ignore-formatted --config /etc/kafka/kafka.properties;
+        fi &&
+        kafka-server-start /etc/kafka/kafka.properties
+      "
+
+volumes:
+  kafka-data:
