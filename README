@@ -23,5 +23,9 @@ service-b    ClusterIP   10.96.xxx.xxx   <none>        3000/TCP         1m
 
 curl http://localhost:30080/call-b
 
+curl http://localhost:30080/notify-c
+
+
+kubectl exec -it <serice c pod name>   -- sh
 
  

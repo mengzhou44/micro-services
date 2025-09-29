@@ -2,6 +2,10 @@ docker-compose down -v
 docker volume rm kafka-demo_kafka-data
 
 docker-compose up -d --build
+
+
+-- kafka 
+
 docker logs kafka --tail 100
 
 

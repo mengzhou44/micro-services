@@ -1,4 +1,6 @@
+require('dotenv').config();
 const { Kafka } = require('kafkajs');
+const { saveEvent } = require("./save-event");
 
 const kafka = new Kafka({
   clientId: 'service-c',
@@ -16,12 +18,25 @@ async function start() {
     fromBeginning: true,   // you’ll get all past events
   });
 
-  await consumer.run({
-    eachMessage: async ({ topic, partition, message }) => {
-      const msg = message.value?.toString(); 
-      console.log(`Service C received message [${topic}]: ${msg}`);
-    },
-  });
+await consumer.run({
+  eachMessage: async ({ topic, partition, message }) => {
+    try {
+      const msg = message.value?.toString();
+      console.log(`Hi, Service C received message [${topic}]: ${msg}`);
+
+      const eventId = await saveEvent(msg);
+      console.log(`Event ${eventId} is inserted into comsobs db`)
+
+    } catch (err) {
+      console.error(`Error processing message [${topic}]`, {
+        partition,
+        message: message.value?.toString(),
+        error: err.message,
+        stack: err.stack,
+      });
+    }
+  },
+});
 }
 
 start().catch((err) => {

@@ -80,6 +80,8 @@ spec:
     metadata:
       labels:
         app: service-c
+      annotations:
+        redeploy-timestamp: "2025-09-29T10:00:12"  
     spec:
       containers:
       - name: service-c
