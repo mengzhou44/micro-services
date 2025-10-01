@@ -2,7 +2,35 @@ const express = require("express");
 const axios = require("axios");
 const { Kafka } = require("kafkajs");
 
+const prometheusClient = require('prom-client');
+prometheusClient.collectDefaultMetrics();
+
+// create a custom counter
+const requestCounter = new prometheusClient.Counter({
+  name: 'service_a_requests_total',
+  help: 'Total requests to service A'
+});
+
+
 const app = express();
+
+// increment in request handler
+app.use((req, res, next) => {
+  requestCounter.inc();
+  next();
+});
+
+// expose metrics endpoint
+app.get('/metrics', async (req, res) => {
+  res.set('Content-Type', prometheusClient.register.contentType);
+  res.end(await prometheusClient.register.metrics());
+});
+
+app.get('/config', async (req, res) => {
+    res.send({apiKey: process.env.API_KEY, secret: process.env.CLIENT_SECRET})
+});
+
+
 
 const PORT = 4000;
 

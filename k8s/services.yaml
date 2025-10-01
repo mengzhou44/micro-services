@@ -40,9 +40,10 @@ spec:
   selector:
     app: service-a
   ports:
-    - port: 4000        # internal cluster port
-      targetPort: 4000  # container port
-      nodePort: 30080   # exposed port on nodes
+     - name: http  
+       port: 4000
+       targetPort: 4000
+       nodePort: 30080
   type: NodePort
 
 ---
@@ -59,12 +60,23 @@ spec:
     metadata:
       labels:
         app: service-a
+      annotations:
+        redeploy-timestamp: "2"  
     spec:
       containers:
       - name: service-a
         image: service-a:1.0
         ports:
         - containerPort: 4000
+        env:
+          - name: CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: service-a-secret   # matches Secret metadata.name
+                key: client_secret    
+        envFrom:              
+        - configMapRef:
+            name: service-a-config
 
 ---
 apiVersion: apps/v1
@@ -81,8 +93,45 @@ spec:
       labels:
         app: service-c
       annotations:
-        redeploy-timestamp: "2025-09-29T10:00:12"  
+        redeploy-timestamp: "2025-09-29T10:00:13"  
     spec:
       containers:
       - name: service-c
         image: service-c:1.0 
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-d
+spec:
+  selector:
+    app: service-d
+  ports:
+    - port: 5000
+      targetPort: 5000
+      nodePort: 30090 
+  type: NodePort
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-d
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: service-d
+  template:
+    metadata:
+      labels:
+        app: service-d
+      annotations:
+        redeploy-timestamp: "1"  
+    spec:
+      containers:
+      - name: service-d
+        image: service-d:1.0
+        ports:
+        - containerPort: 5000

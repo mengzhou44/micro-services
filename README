@@ -7,9 +7,13 @@ Build images locally:
 docker build -t service-c:1.0 ./service-c
 docker build -t service-b:1.0 ./service-b
 docker build -t service-a:1.0 ./service-a
+docker build -t service-d:1.0 ./service-d
 
 
 Apply Kubernetes manifests:
+
+kubectl apply -f  ./k8s/service-a-config.yaml
+kubectl apply -f  ./k8s/service-a-secret.yaml
 
 kubectl apply -f  ./k8s/services.yaml
 kubectl get pods
