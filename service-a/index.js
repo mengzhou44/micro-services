@@ -35,7 +35,7 @@ app.get('/config', async (req, res) => {
 const PORT = 4000;
 
 // Service B URL via ClusterIP (Kubernetes service name)
-const SERVICE_B_URL = "http://service-b:3000/hello";
+const SERVICE_B_URL = "http://service-b-service-b:3000/hello";
 
 const kafka = new Kafka({
   clientId: "service-a",

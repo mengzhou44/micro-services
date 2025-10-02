@@ -1,0 +1,18 @@
+apiVersion: v2
+name: microservices
+description: Umbrella chart to deploy service-a, service-b, service-c, and service-d
+type: application
+version: 1.0.0
+appVersion: "1.0"
+
+# Define dependencies (subcharts)
+dependencies:
+  - name: service-a
+    version: "1.0.0"
+    repository: "file://service-a"
+  - name: service-b
+    version: "1.0.0"
+    repository: "file://service-b"
+  - name: service-c
+    version: "1.0.0"
+    repository: "file://service-c"

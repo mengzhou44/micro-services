@@ -1,0 +1,3 @@
+helm uninstall service-c
+
+helm install service-c . --values values.yaml

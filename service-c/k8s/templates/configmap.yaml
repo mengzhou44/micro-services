@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "service-c.fullname" . }}-config
+data:
+  COSMOS_ENDPOINT: {{ .Values.config.cosmosEndpoint | quote }}
+  COSMOS_DB: {{ .Values.config.cosmosDb | quote }}
+  COSMOS_CONTAINER: {{ .Values.config.cosmosContainer | quote }}
+ 

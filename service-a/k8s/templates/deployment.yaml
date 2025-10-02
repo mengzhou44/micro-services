@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "service-a.fullname" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "service-a.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "service-a.name" . }}
+      annotations:
+        redeploy-timestamp: "{{ .Values.annotations.redeployTimestamp }}"
+    spec:
+      containers:
+        - name: {{ include "service-a.name" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.port }}
+          env:
+            - name: CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.env.clientSecretName }}
+                  key: {{ .Values.env.clientSecretKey }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.env.configMapName }}

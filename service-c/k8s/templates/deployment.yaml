@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "service-c.fullname" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "service-c.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "service-c.name" . }}
+      annotations:
+        redeploy-timestamp: "{{ .Values.annotations.redeployTimestamp }}"
+    spec:
+      containers:
+        - name: {{ include "service-c.name" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: COSMOS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.env.secretName}}
+                  key: {{ .Values.env.secretKey }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.env.configMapName }}

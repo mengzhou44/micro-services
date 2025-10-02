@@ -1,0 +1,3 @@
+helm uninstall service-b
+
+helm install service-b . --values values.yaml
