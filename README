@@ -1,6 +1,10 @@
 Delete everything in the default namespace
- kubectl delete all --all
+kubectl delete all --all
 
+kubectl delete all,secrets,configmaps --all -n default
+
+
+helm install service-a . --values values.yaml
 
 Build images locally:
 
@@ -29,6 +33,6 @@ curl http://localhost:30080/call-b
 curl http://localhost:30080/notify-c
 
 
-kubectl exec -it <serice c pod name>   -- sh
+kubectl exec -it <serice c pod name>   
 
  

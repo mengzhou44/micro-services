@@ -3,5 +3,5 @@ service-c
 {{- end -}}
 
 {{- define "service-c.fullname" -}}
-{{ .Release.Name }}-{{ include "service-c.name" . }}
+{{ .Release.Name }}
 {{- end -}}
