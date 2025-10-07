@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const axios = require("axios");
 const { Kafka } = require("kafkajs");
@@ -29,8 +31,6 @@ app.get('/metrics', async (req, res) => {
 app.get('/config', async (req, res) => {
     res.send({apiKey: process.env.API_KEY, secret: process.env.CLIENT_SECRET})
 });
-
-
 
 const PORT = 4000;
 
@@ -74,6 +74,7 @@ app.get("/call-b", async (req, res) => {
     res.status(500).send(`Error calling Service B: ${err.message}`);
   }
 });
+
 
 app.listen(PORT, async () => {
   console.log(`Service A running on port ${PORT}`);
